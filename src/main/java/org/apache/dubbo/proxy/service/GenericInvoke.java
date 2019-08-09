@@ -1,12 +1,15 @@
 package org.apache.dubbo.proxy.service;
 
+import com.alibaba.dubbo.common.Constants;
+import com.alibaba.dubbo.config.ApplicationConfig;
+import com.alibaba.dubbo.config.ReferenceConfig;
+import com.alibaba.dubbo.config.RegistryConfig;
+import com.alibaba.dubbo.registry.Registry;
+import com.alibaba.dubbo.rpc.RpcException;
+import com.alibaba.dubbo.rpc.service.GenericService;
+
 import org.apache.dubbo.proxy.utils.ResultCode;
-import org.apache.dubbo.config.ApplicationConfig;
-import org.apache.dubbo.config.ReferenceConfig;
-import org.apache.dubbo.config.RegistryConfig;
-import org.apache.dubbo.registry.Registry;
-import org.apache.dubbo.rpc.RpcException;
-import org.apache.dubbo.rpc.service.GenericService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +30,7 @@ public class GenericInvoke {
     private static void init() {
         RegistryConfig registryConfig = new RegistryConfig();
         registryConfig.setAddress(registry.getUrl().getProtocol() + "://" + registry.getUrl().getAddress());
-        registryConfig.setGroup(registry.getUrl().getParameter(org.apache.dubbo.common.constants.CommonConstants.GROUP_KEY));
+        registryConfig.setGroup(registry.getUrl().getParameter(Constants.GROUP_KEY));
         applicationConfig = new ApplicationConfig();
         applicationConfig.setName("dubbo-proxy");
         applicationConfig.setRegistry(registryConfig);

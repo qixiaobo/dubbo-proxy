@@ -3,7 +3,6 @@ package org.apache.dubbo.proxy.server;
 import com.alibaba.fastjson.JSON;
 import org.apache.dubbo.proxy.dao.ServiceDefinition;
 import org.apache.dubbo.proxy.dao.ServiceMapping;
-import org.apache.dubbo.proxy.metadata.MetadataCollector;
 import org.apache.dubbo.proxy.utils.NamingThreadFactory;
 import org.apache.dubbo.proxy.worker.RequestWorker;
 import io.netty.buffer.ByteBuf;
@@ -27,15 +26,13 @@ import java.util.concurrent.Executors;
 public class HttpProcessHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
 
     private ExecutorService businessThreadPool;
-    private MetadataCollector metadataCollector;
     private ServiceMapping serviceMapping;
     private Logger logger = LoggerFactory.getLogger(HttpProcessHandler.class);
 
 
-    public HttpProcessHandler(int businessThreadCount, ServiceMapping serviceMapping, MetadataCollector metadataCollector) {
+    public HttpProcessHandler(int businessThreadCount, ServiceMapping serviceMapping) {
         super();
         this.businessThreadPool = Executors.newFixedThreadPool(businessThreadCount, new NamingThreadFactory("Dubbo-proxy-request-worker"));
-        this.metadataCollector = metadataCollector;
         this.serviceMapping = serviceMapping;
     }
 
@@ -77,7 +74,7 @@ public class HttpProcessHandler extends SimpleChannelInboundHandler<FullHttpRequ
     }
 
     private void doRequest(ChannelHandlerContext ctx, ServiceDefinition serviceDefinition, HttpRequest msg) {
-        businessThreadPool.execute(new RequestWorker(serviceDefinition, ctx, msg, metadataCollector, serviceMapping));
+        businessThreadPool.execute(new RequestWorker(serviceDefinition, ctx, msg, serviceMapping));
     }
 
     @Override

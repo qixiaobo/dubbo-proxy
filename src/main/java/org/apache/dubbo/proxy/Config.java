@@ -1,12 +1,14 @@
 package org.apache.dubbo.proxy;
 
+import com.alibaba.dubbo.common.Constants;
+import com.alibaba.dubbo.common.URL;
+import com.alibaba.dubbo.common.extension.ExtensionLoader;
+import com.alibaba.dubbo.common.utils.StringUtils;
+import com.alibaba.dubbo.registry.Registry;
+import com.alibaba.dubbo.registry.RegistryFactory;
+
 import org.apache.dubbo.proxy.dao.ServiceMapping;
-import org.apache.dubbo.proxy.metadata.MetadataCollector;
-import org.apache.dubbo.common.URL;
-import org.apache.dubbo.common.extension.ExtensionLoader;
-import org.apache.dubbo.common.utils.StringUtils;
-import org.apache.dubbo.registry.Registry;
-import org.apache.dubbo.registry.RegistryFactory;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -50,24 +52,12 @@ public class Config {
     Registry getRegistry() {
         URL url = URL.valueOf(registryAddress);
         if (StringUtils.isNotEmpty(group)) {
-            url = url.addParameter(org.apache.dubbo.common.constants.CommonConstants.GROUP_KEY, group);
+            url = url.addParameter(Constants.GROUP_KEY, group);
         }
         RegistryFactory registryFactory = ExtensionLoader.getExtensionLoader(RegistryFactory.class).getAdaptiveExtension();
         Registry registry = registryFactory.getRegistry(url);
         return registry;
     }
-
-    @Bean
-    MetadataCollector getMetadataCollector() {
-        MetadataCollector metaDataCollector = null;
-        if (StringUtils.isNotEmpty(metadataAddress)) {
-            URL metadataUrl = URL.valueOf(metadataAddress);
-            metaDataCollector = ExtensionLoader.getExtensionLoader(MetadataCollector.class).
-                    getExtension(metadataUrl.getProtocol());
-        }
-        return metaDataCollector;
-    }
-
 
 
     public static class Mapping {

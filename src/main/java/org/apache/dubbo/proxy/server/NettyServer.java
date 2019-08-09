@@ -1,7 +1,9 @@
 package org.apache.dubbo.proxy.server;
 
+import com.alibaba.dubbo.registry.Registry;
+
 import org.apache.dubbo.proxy.dao.ServiceMapping;
-import org.apache.dubbo.proxy.metadata.MetadataCollector;
+
 import org.apache.dubbo.proxy.service.GenericInvoke;
 import org.apache.dubbo.proxy.utils.InetAddressUtil;
 import org.apache.dubbo.proxy.utils.NamingThreadFactory;
@@ -17,7 +19,7 @@ import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
-import org.apache.dubbo.registry.Registry;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +48,6 @@ public class NettyServer {
     @Value("${business.thread.count}")
     private int businessThreadCount;
 
-    @Autowired
-    private MetadataCollector metadataCollector;
 
     @Autowired
     private ServiceMapping serviceMapping;
@@ -86,7 +86,7 @@ public class NettyServer {
                 "Dubbo-Proxy-Boss"));
         workerGroup = new NioEventLoopGroup(Runtime.getRuntime().availableProcessors() * 2,
                 new NamingThreadFactory("Dubbo-Proxy-Work"));
-        HttpProcessHandler processHandler = new HttpProcessHandler(businessThreadCount, serviceMapping, metadataCollector);
+        HttpProcessHandler processHandler = new HttpProcessHandler(businessThreadCount, serviceMapping);
         bootstrap.group(bossGroup, workerGroup)
                 .channel(NioServerSocketChannel.class)
                 .childHandler(new ProxyChannelInitializer(processHandler))
