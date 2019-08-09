@@ -26,10 +26,3 @@ http POST body:
     ]
 }
 ```
-
-* In the Dubbo 2.7 version  and later updates versions, paramTypes is optional data, if not filled in, Dubbo Proxy would get related mapping data from metadata center.
-* You can set registry address and metadata center address in `application.yml`
-```
-proxy.registry.address: zookeeper://127.0.0.1:2181   #registry center address, same as Dubbo service's 
-proxy.metadata-report.address: zookeeper://127.0.0.1:2181  #metadata center address, used by paramType search, support for dubbo 2.7 or later
-```

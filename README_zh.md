@@ -23,10 +23,3 @@ http POST body如下:
     ]
 }
 ```
-
-* 在Dubbo 2.7及后续版本中，paramTypes为可选，如果不填写，Dubbo Proxy会在元数据中心获取对应的参数类型。
-* 可以在`application.yml`中指定注册中心和元数据中心的地址
-```
-proxy.registry.address: zookeeper://127.0.0.1:2181   #注册中心地址，和Dubbo服务的注册中心相同
-proxy.metadata-report.address: zookeeper://127.0.0.1:2181  #元数据中心的地址，未指定paramTypes时查找使用，支持Dubbo 2.7及以后版本
-```
